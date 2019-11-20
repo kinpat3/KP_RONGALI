@@ -1,4 +1,4 @@
-from wtforms import StringField, PasswordField, SubmitField,HiddenField
+from wtforms import StringField, PasswordField, SubmitField,HiddenField,TextAreaField
 from wtforms.validators import DataRequired, EqualTo, Email
 from flask_wtf import FlaskForm
 
@@ -21,4 +21,11 @@ class PostForm(FlaskForm):
 
 class TokenHiddenForm(FlaskForm):
     token = HiddenField("Token Hidden",id="token-hidden")
-    
+    submit = SubmitField()
+ 
+class ContactForm(FlaskForm):
+  name = StringField("Name")
+  email = StringField("Email")
+  subject = StringField("Subject")
+  message = TextAreaField("Message")
+  submit = SubmitField("Send")

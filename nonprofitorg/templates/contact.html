@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+ 
+{% block content %}
+<!-- Contact Section -->
+<div class="w3-container w3-padding-32 w3-margin-top" id="contact" style="background-image:url('https://images.unsplash.com/photo-1548560463-fd1af27c6384');background-position: 25% 25%;
+background-repeat: repeat">
+    <h3 class="w3-border-bottom w3-border-light-grey w3-padding-16">Contact</h3>
+    <p>Have a general question or comment for our support team?</p>
+    <form action="{{ url_for('contact') }}" method=post>
+            {{ form.hidden_tag() }}
+ 
+            <input class="w3-input w3-border" type="text" placeholder="Name" required name="Name"> 
+        
+            <input class="w3-input w3-section w3-border" type="text" placeholder="Email" required name="Email">
+ 
+            <input class="w3-input w3-section w3-border" type="text" placeholder="Subject" required name="Subject">
+ 
+            <input class="w3-input w3-section w3-border" type="text" placeholder="Message" required name="Message">
+ 
+            <button class="w3-button w3-black w3-section" type="submit">
+                <i class="fa fa-paper-plane"></i> SEND MESSAGE
+            </button>   
+    </form>
+</div>
+<!-- Image of location/map 
+<div class="w3-container">
+  <img src="https://images.unsplash.com/photo-1548560463-fd1af27c6384" class="w3-image" style="width:100% background" >
+</div>
+
+<!-- End page content -->
+{% endblock %}

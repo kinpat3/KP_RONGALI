@@ -12,22 +12,53 @@ from flask_login import login_user, current_user, logout_user, login_required
 
 import stripe 
 
+from flask import Flask, render_template
+from nonprofitorg.forms import ContactForm
+from flask import Flask, render_template, request
+
 # Home Route
 @app.route("/")
 def home():
     post = Post.query.all()
-    return render_template('home.html',posts = post)
+    return render_template('home.html',title = "Base")
 
-@app.route("/register",methods=["GET","POST"])
+
+# Contact Route 
+@app.route('/contact', methods=['GET', 'POST'])
+def contact():
+    form = ContactForm()
+ 
+    if request.method == 'POST':
+        return 'Form Submmited.'
+
+    return render_template('contact.html', form=form)
+
+# Mission Route
+@app.route("/mission")
+def mission():
+    post = Post.query.all()
+    return render_template('mission.html', title='Mission')
+
+# About Route 
+@app.route("/about")
+def about():
+    return render_template('about.html', title='About')
+
+
+
+
+
+@app.route("/signup",methods=["GET","POST"])
 def createUser():
     form = SignUpForm()
     if request.method == "POST" and form.validate():
         flash("Thanks for Signing Up!")
         # Gathering Form Data
-        username = form.username.data
+        name = form.name.data
         email  = form.email.data
-        password = form.password.data
-        print(username, email, password)
+        subject = form.subject.data
+        comment = form.comment.data
+        print(username, email, subject, comment)
 
         # Add Form data to User Model Class
         user = User(username,email,password)
@@ -96,6 +127,25 @@ def payment():
             amount=request.args.get('payment-form') ,
             currency='usd',
             description='Example charge',
-            source=request.args.get('token'),
+            source=token_hidden.token.data,
         )
-    return render_template('payment.html',key=publishable_key,price=price,token_hidden = token_hidden)
+    return render_template('payment.html',key=publishable_key,price=price,token_hidden =token_hidden)
+
+
+@app.route('/charge',methods = ['GET','POST'])
+def charge():
+    token_hidden = TokenHiddenForm()
+
+    # token = request.form['stripeToken']# Using Flask
+    if request.method == 'POST':
+        charge = stripe.Charge.create(
+            amount=3400 ,
+            currency='usd',
+            description='Example charge',
+            source=token_hidden.token.data,
+        )
+    return render_template('thanks.html')
+
+
+
+ 

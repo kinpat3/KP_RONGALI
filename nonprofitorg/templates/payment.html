@@ -1,15 +1,48 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oswald">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open Sans">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="../static/css/payment.css">
+<style>
+h1,h2,h3,h4,h5,h6 {font-family: "Oswald"}
+body {font-family: "Open Sans"}
+</style>
+<body class="w3-light-grey">
 
-<form action="" name="payment-form">
-        <input type="text" name="donation" id="donation">
-        <button id="custom-button" onClick="getDonation()">Pay with card</button>
+<!-- w3-content defines a container for fixed size centered content, 
+and is wrapped around the whole page content, except for the footer in this example -->
+<div class="w3-content" style="max-width:1000px">
+  <!-- Image header -->
+    <header class="w3-display-container w3-wide" id="home">
+        <img class="w3-image" src="https://images.unsplash.com/photo-1503848188692-ef8ea7cf65d6" alt="Fashion Blog" style="width:min-content">
+        <div class="w3-display-bottommiddle w3-padding-large">
+            <form action="" name="payment-form">
+                <input type="text" name="donation" id="donation">
+                <button class="w3-button w3-white w3-padding-large w3-large w3-opacity w3-hover-opacity-off" id="custom-button" onClick="getDonation()">
+                    <a class="#">Pay with card</a>
+                 </button>
+            </form>
+         </div>
+    </header>
+</div>   
+  <!--FOOTER-->
+   <header class="w3-container w3-center w3-padding-48 w3-white">
+        <h1 class="w3-xxxlarge"><b>RANGOLI</b></h1>
+        <h6>THANKS YOU FOR YOUR GENEROUS DONATATION! <span class="w3-tag"></span></h6>
+      </header>
+</body>
+</html>
+
+<form action="{{ url_for('charge') }}" name="hidden-form" method="POST">
+    {{ token_hidden.token }}
 </form>
-
-{{ token_hidden.token }}
-
-
 
 
 
@@ -23,10 +56,12 @@
         token: function(token){
             console.log(token)
             document.getElementById('token-hidden').value = token['id']
+            if(document.getElementById('token-hidden').value != null){
+                document.forms['hidden-form'].submit()
+            }
             return token
         }
     });
-
     function getDonation(){
         donation = document.getElementById('donation').value
         console.log(donation)
@@ -40,7 +75,6 @@
         });
         event.preventDefault();
     });
-
     // Close checkout on page:
     window.addEventListener("popstate",function(){
         handler.close();
